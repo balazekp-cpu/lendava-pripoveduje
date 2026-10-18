@@ -231,6 +231,7 @@ const extras={vinarium:'<h3>Več o Vinariumu</h3><p>Razgledni stolp je visok 53,
 const cards=document.getElementById('cards');const dialog=document.getElementById('detail');let current=null;
 const musicAudio=document.getElementById('story-music');
 let introTimer=null, playbackToken=0, speechUtterance=null, fadeFrame=null, outroTimer=null;
+let recordedAudio=null, recordedActive=false;
 const MUSIC_VOLUME=.9;
 function cancelFade(){if(fadeFrame!==null){cancelAnimationFrame(fadeFrame);fadeFrame=null;}if(outroTimer!==null){clearTimeout(outroTimer);outroTimer=null;}}
 function fadeMusic(from,to,duration,token,done){
@@ -244,6 +245,8 @@ function stopSpeech(){
  cancelFade();
  if(introTimer!==null){clearTimeout(introTimer);introTimer=null;}
  musicAudio.pause();musicAudio.currentTime=0;
+ if(recordedAudio){recordedAudio.pause();recordedAudio.currentTime=0;recordedAudio=null;}
+ recordedActive=false;
  if('speechSynthesis' in window)window.speechSynthesis.cancel();
  speechUtterance=null;
  document.getElementById('listen').textContent='▶ Poslušaj zgodbo';
@@ -256,13 +259,36 @@ function playMusic(id){
  musicAudio.volume=MUSIC_VOLUME;
  musicAudio.play().catch(()=>{});
 }
-function openPlace(p){stopSpeech();current=p;const photo=document.getElementById('detail-photo');photo.classList.remove('hidden');photo.innerHTML=photoMarkup(p.id);const oldCredit=document.getElementById('detail-credit');if(oldCredit)oldCredit.remove();photo.insertAdjacentHTML('afterend','<div id="detail-credit">'+creditMarkup(p.id)+'</div>');const hasStory=Boolean(stories[p.id]);document.getElementById('detail-title').textContent=p.name;document.getElementById('detail-intro').textContent=p.description;document.getElementById('detail-text').textContent=stories[p.id]||'';document.getElementById('extra').innerHTML=extras[p.id]||'';document.getElementById('music-enabled').disabled=!['grad','sinagoga','dvorana','vinarium','trojica','stadion'].includes(p.id);document.getElementById('music-enabled').parentElement.style.display=document.getElementById('music-enabled').disabled?'none':'';document.querySelector('.story-hint').textContent=document.getElementById('music-enabled').disabled?'Slovenski računalniški glas. Glasbeni uvod za to znamenitost še pripravljamo.':'Slovenski računalniški glas. Glasbeni uvod traja približno 6 sekund in se nežno utiša; po zgodbi sledi glasbeni zaključek.';document.getElementById('detail-text').classList.add('hidden');document.getElementById('read').textContent='📖 Preberi zgodbo';document.getElementById('read').setAttribute('aria-expanded','false');document.getElementById('story-section').classList.toggle('hidden',!hasStory);document.getElementById('story-unavailable').classList.toggle('hidden',hasStory);document.getElementById('extra').classList.add('hidden');document.getElementById('more').textContent='Želim izvedeti več';document.getElementById('more').setAttribute('aria-expanded','false');dialog.showModal()}
+function openPlace(p){stopSpeech();current=p;const photo=document.getElementById('detail-photo');photo.classList.remove('hidden');photo.innerHTML=photoMarkup(p.id);const oldCredit=document.getElementById('detail-credit');if(oldCredit)oldCredit.remove();photo.insertAdjacentHTML('afterend','<div id="detail-credit">'+creditMarkup(p.id)+'</div>');const hasStory=Boolean(stories[p.id]);document.getElementById('detail-title').textContent=p.name;document.getElementById('detail-intro').textContent=p.description;document.getElementById('detail-text').textContent=stories[p.id]||'';document.getElementById('extra').innerHTML=extras[p.id]||'';document.getElementById('music-enabled').disabled=!['grad','sinagoga','dvorana','vinarium','trojica','stadion'].includes(p.id);document.getElementById('music-enabled').parentElement.style.display=document.getElementById('music-enabled').disabled?'none':'';document.querySelector('.story-hint').textContent=document.getElementById('music-enabled').disabled?'Slovenski računalniški glas. Glasbeni uvod za to znamenitost še pripravljamo.':'Slovenski računalniški glas. Glasbeni uvod traja približno 6 sekund in se nežno utiša; po zgodbi sledi glasbeni zaključek.';document.querySelector('.story-hint').textContent=p.id==='grad'?'Posneta slovenska pripoved. Glasbeni uvod traja približno 6 sekund in se nežno utiša; po zgodbi sledi zaključek.':document.querySelector('.story-hint').textContent;document.getElementById('speech-rate').parentElement.style.display=p.id==='grad'?'none':'';document.getElementById('detail-text').classList.add('hidden');document.getElementById('read').textContent='📖 Preberi zgodbo';document.getElementById('read').setAttribute('aria-expanded','false');document.getElementById('story-section').classList.toggle('hidden',!hasStory);document.getElementById('story-unavailable').classList.toggle('hidden',hasStory);document.getElementById('extra').classList.add('hidden');document.getElementById('more').textContent='Želim izvedeti več';document.getElementById('more').setAttribute('aria-expanded','false');dialog.showModal()}
 places.forEach(p=>{const c=document.createElement('article');c.className='card';const tag=document.createElement('p');tag.className='tag';tag.textContent=p.type;const h=document.createElement('h3');h.textContent=p.name;const desc=document.createElement('p');desc.textContent=p.description;const btn=document.createElement('button');btn.className='btn';btn.textContent='Odkrij zgodbo';btn.addEventListener('click',()=>openPlace(p));const picture=document.createElement('div');picture.className='card-photo';picture.innerHTML=photoMarkup(p.id);const body=document.createElement('div');body.className='card-body';body.append(tag,h,desc,btn);body.insertAdjacentHTML('beforeend',creditMarkup(p.id));c.append(picture,body);cards.append(c)});
 document.getElementById('close').onclick=()=>dialog.close();dialog.addEventListener('close',stopSpeech);
 document.getElementById('read').onclick=()=>{const e=document.getElementById('detail-text');e.classList.toggle('hidden');const open=!e.classList.contains('hidden');document.getElementById('read').textContent=open?'📖 Skrij besedilo':'📖 Preberi zgodbo';document.getElementById('read').setAttribute('aria-expanded',String(open))};
 document.getElementById('more').onclick=()=>{const e=document.getElementById('extra');e.classList.toggle('hidden');const open=!e.classList.contains('hidden');document.getElementById('more').textContent=open?'Skrij dodatne podatke':'Želim izvedeti več';document.getElementById('more').setAttribute('aria-expanded',String(open))};
+function playRecordedCastle(){
+ stopSpeech();const token=playbackToken;const id='grad';
+ recordedAudio=new Audio('govor/grad.mp3');recordedAudio.preload='auto';recordedActive=true;
+ const voice=recordedAudio;
+ const finish=()=>{if(token!==playbackToken)return;stopSpeech();if(!document.getElementById('music-enabled').checked)return;
+  const outroToken=playbackToken;playMusic(id);musicAudio.volume=0;fadeMusic(0,MUSIC_VOLUME,900,outroToken);
+  outroTimer=setTimeout(()=>{outroTimer=null;if(outroToken!==playbackToken)return;fadeMusic(MUSIC_VOLUME,0,2000,outroToken,()=>{musicAudio.pause();musicAudio.currentTime=0;});},4500);
+ };
+ voice.onended=finish;
+ voice.onerror=()=>{if(token===playbackToken){stopSpeech();alert('Posnetka gradu ni mogoče naložiti. Preveri, ali je mapa govor pravilno naložena.');}};
+ const begin=()=>{if(token!==playbackToken||!recordedActive)return;if(introTimer!==null){clearTimeout(introTimer);introTimer=null;}
+  cancelFade();musicAudio.pause();musicAudio.currentTime=0;
+  document.getElementById('pause').disabled=false;
+  voice.play().catch(()=>{if(token===playbackToken){stopSpeech();alert('Telefon je blokiral predvajanje. Ponovno pritisni Poslušaj zgodbo.');}});
+ };
+ document.getElementById('listen').textContent='■ Ustavi zgodbo';
+ document.getElementById('pause').disabled=true;
+ if(document.getElementById('music-enabled').checked){
+  playMusic(id);introTimer=setTimeout(begin,6500);
+  setTimeout(()=>{if(token===playbackToken&&introTimer!==null)fadeMusic(MUSIC_VOLUME,0,2500,token);},4000);
+ }else begin();
+}
 document.getElementById('listen').onclick=()=>{
- if(speechUtterance||introTimer!==null||window.speechSynthesis?.speaking){stopSpeech();return;}
+ if(speechUtterance||introTimer!==null||recordedActive||window.speechSynthesis?.speaking){stopSpeech();return;}
+ if(current?.id==='grad'){playRecordedCastle();return;}
  if(!('speechSynthesis' in window)){alert('Brskalnik ne podpira glasnega branja.');return;}
  stopSpeech();const token=playbackToken;const placeId=current.id;const hasMusic=['grad','sinagoga','dvorana','vinarium','trojica','stadion'].includes(placeId);
  let speechText=stories[placeId];
@@ -299,7 +325,7 @@ document.getElementById('listen').onclick=()=>{
   setTimeout(()=>{if(token===playbackToken&&!started)fadeMusic(MUSIC_VOLUME,0,2500,token);},4000);
  }else{document.getElementById('pause').disabled=false;window.speechSynthesis.speak(u)}
 };
-document.getElementById('pause').onclick=()=>{if(introTimer!==null)return;const s=window.speechSynthesis;if(s.paused){s.resume();document.getElementById('pause').textContent='⏸ Premor'}else{s.pause();document.getElementById('pause').textContent='▶ Nadaljuj'}};document.getElementById('navigate').onclick=()=>{if(current)window.open('https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(current.lat+','+current.lng),'_blank','noopener')};
+document.getElementById('pause').onclick=()=>{if(introTimer!==null)return;if(recordedAudio){if(recordedAudio.paused){recordedAudio.play().catch(()=>{});document.getElementById('pause').textContent='⏸ Premor'}else{recordedAudio.pause();document.getElementById('pause').textContent='▶ Nadaljuj'}return;}const s=window.speechSynthesis;if(s.paused){s.resume();document.getElementById('pause').textContent='⏸ Premor'}else{s.pause();document.getElementById('pause').textContent='▶ Nadaljuj'}};document.getElementById('navigate').onclick=()=>{if(current)window.open('https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(current.lat+','+current.lng),'_blank','noopener')};
 document.getElementById('explore').onclick=()=>document.getElementById('map-title').scrollIntoView({behavior:'smooth'});
 // OpenFreeMap + MapLibre: javni vektorski slog brez API ključa.
 const map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',center:[16.4570,46.5672],zoom:13.7});
