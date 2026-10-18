@@ -5,34 +5,304 @@
 <meta name="theme-color" content="#102d46"><title>Lendava pripoveduje</title>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css">
 <style>
-:root{--navy:#102d46;--blue:#175b84;--gold:#bb8848;--cream:#f8f5ee;--muted:#637482}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--cream);color:var(--navy)}header{background:var(--navy);color:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px}header strong{font-family:Georgia,serif;font-size:1.3rem}header small{display:block;letter-spacing:.15em;color:#e9c999}select,button{font:inherit}select{border-radius:10px;padding:8px;border:1px solid #c9d3d9}main{max-width:1100px;margin:auto;padding:24px 16px 90px}.hero{border-radius:24px;padding:48px 28px;color:white;background:linear-gradient(120deg,#102d46ed,#1b6078d8),url('') center/cover;min-height:260px;display:flex;flex-direction:column;justify-content:center}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.8rem);margin:0 0 8px}.hero p{font-size:1.15rem;margin:0 0 22px}.btn{border:0;border-radius:12px;padding:12px 18px;background:var(--navy);color:white;cursor:pointer;font-weight:650}.btn.alt{background:white;color:var(--navy)}.btn:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.section-title{margin:28px 0 14px;font-size:1.35rem}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:white;border-radius:17px;padding:20px;box-shadow:0 5px 18px #132c3910;border:1px solid #e5e8e8}.card h3{margin:4px 0 9px}.card p{color:#455765;line-height:1.5}.tag{color:#805e29;font-size:.8rem;font-weight:700;letter-spacing:.04em}.actions{display:flex;flex-wrap:wrap;gap:9px}#map{height:390px;border-radius:18px;z-index:0;border:1px solid #d9e0e2}.muted{color:var(--muted)}.notice{padding:12px 16px;border-left:4px solid var(--gold);background:#fff9ed;border-radius:8px;margin:15px 0}.hidden{display:none}footer{text-align:center;padding:25px 15px;color:#5c6a75;font-size:.88rem}dialog{border:0;border-radius:20px;max-width:560px;width:calc(100% - 28px);padding:25px;box-shadow:0 20px 70px #0005}dialog::backdrop{background:#0d2239a9}dialog h2{margin-top:4px}.close{float:right;border:0;background:#e8edf0;border-radius:9px;padding:7px 12px;cursor:pointer}.map-info{margin-top:8px;font-size:.9rem}@media(max-width:550px){header{padding:14px}header strong{font-size:1rem}.hero{min-height:220px;padding:28px 22px}#map{height:330px}}
+:root{--navy:#102d46;--blue:#175b84;--gold:#bb8848;--cream:#f8f5ee;--muted:#637482}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--cream);color:var(--navy)}header{background:var(--navy);color:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px}header strong{font-family:Georgia,serif;font-size:1.3rem}header small{display:block;letter-spacing:.15em;color:#e9c999}select,button{font:inherit}select{border-radius:10px;padding:8px;border:1px solid #c9d3d9}main{max-width:1100px;margin:auto;padding:24px 16px 90px}.hero{border-radius:24px;padding:48px 28px;color:white;background:linear-gradient(120deg,#102d46ed,#1b6078d8),url('https://commons.wikimedia.org/wiki/Special:FilePath/Lendava_Castle_(1).jpg?width=1200') center/cover;min-height:260px;display:flex;flex-direction:column;justify-content:center}.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.8rem);margin:0 0 8px}.hero p{font-size:1.15rem;margin:0 0 22px}.btn{border:0;border-radius:12px;padding:12px 18px;background:var(--navy);color:white;cursor:pointer;font-weight:650}.btn.alt{background:white;color:var(--navy)}.btn:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.section-title{margin:28px 0 14px;font-size:1.35rem}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:white;border-radius:17px;padding:20px;box-shadow:0 5px 18px #132c3910;border:1px solid #e5e8e8}.card h3{margin:4px 0 9px}.card p{color:#455765;line-height:1.5}.tag{color:#805e29;font-size:.8rem;font-weight:700;letter-spacing:.04em}.actions{display:flex;flex-wrap:wrap;gap:9px}#map{height:390px;border-radius:18px;z-index:0;border:1px solid #d9e0e2}.muted{color:var(--muted)}.notice{padding:12px 16px;border-left:4px solid var(--gold);background:#fff9ed;border-radius:8px;margin:15px 0}.hidden{display:none}footer{text-align:center;padding:25px 15px;color:#5c6a75;font-size:.88rem}dialog{border:0;border-radius:20px;max-width:560px;width:calc(100% - 28px);padding:25px;box-shadow:0 20px 70px #0005}dialog::backdrop{background:#0d2239a9}dialog h2{margin-top:4px}.close{float:right;border:0;background:#e8edf0;border-radius:9px;padding:7px 12px;cursor:pointer}.map-info{margin-top:8px;font-size:.9rem}@media(max-width:550px){header{padding:14px}header strong{font-size:1rem}.hero{min-height:220px;padding:28px 22px}#map{height:330px}}
+
+.card{overflow:hidden;padding:0}.card-body{padding:19px}.card-photo,.photo-slot{height:165px;background:linear-gradient(135deg,#244c65,#8195a2);position:relative;overflow:hidden}.card-photo img,.photo-slot img{width:100%;height:100%;object-fit:cover;display:block}.photo-slot{height:200px;border-radius:13px;margin:8px 0 17px}.photo-credit{font-size:.74rem;color:#526572;margin:5px 0 12px}.placeholder{height:100%;display:grid;place-items:center;color:#fff;text-align:center;padding:15px;line-height:1.5;background:linear-gradient(135deg,#173c55,#497c87)}.speed-label{display:block;margin:13px 0;font-size:.9rem}.story-text{white-space:pre-line;line-height:1.75;margin-top:18px}.story-preview{line-height:1.55}dialog{max-height:90vh;overflow:auto}.story-controls{margin-bottom:14px}#extra{line-height:1.65;margin-top:16px}#extra p{margin:9px 0}
 </style>
 </head>
 <body>
 <header><div><strong>Lendava pripoveduje</strong><small>VSAK KOTIČEK IMA SVOJO ZGODBO</small></div><label><span class="hidden">Jezik</span><select id="lang" aria-label="Jezik"><option value="sl">SL</option><option value="hu" disabled>HU – kmalu</option><option value="en" disabled>EN – soon</option><option value="de" disabled>DE – bald</option></select></label></header>
 <main>
 <section class="hero"><h1>Odkrij zgodbe Lendave.</h1><p>Sprehod skozi mesto, zgodovino in spomine.</p><div><button class="btn alt" id="explore">Razišči zemljevid ↓</button></div></section>
-<div class="notice">To je prva preizkusna različica. Zgodovinski opisi in zvočne pripovedi še niso objavljeni; fotografije dodava po preverjanju dovoljenj.</div>
+<div class="notice">Razvojna različica V12: šest zgodb. Prve tri imajo glasbeni uvod in zaključek; za nove tri glasbo še izbiramo. Uporabljamo samo resnične fotografije, kjer imamo ustrezno dovoljenje; druge bomo dodali pozneje.</div>
 <h2 class="section-title" id="landmarks">Znamenitosti</h2><div class="cards" id="cards"></div>
 <h2 class="section-title" id="map-title">Zemljevid znamenitosti</h2><div id="map" aria-label="Interaktivni zemljevid Lendave"></div><p class="map-info muted" id="gps-status">Za prikaz svoje lokacije lahko omogočiš GPS. Lokacije ne shranjujemo.</p><div class="actions"><button class="btn" id="locate">📍 Pokaži mojo lokacijo</button><button class="btn" id="stop" style="background:#647482" disabled>Ustavi GPS</button></div>
 </main>
-<dialog id="detail"><button class="close" id="close" aria-label="Zapri">✕</button><p class="tag">LENDAVA PRIPOVEDUJE</p><h2 id="detail-title"></h2><p id="detail-text"></p><p class="muted">Zvočna pripoved bo dodana po pripravi in preverjanju vsebine.</p><div class="actions"><button class="btn" id="navigate">Odpri pot v Google Maps ↗</button></div></dialog>
+<dialog id="detail" aria-labelledby="detail-title"><button class="close" id="close" aria-label="Zapri">✕</button><p class="tag">LENDAVA PRIPOVEDUJE</p><h2 id="detail-title"></h2><p id="detail-intro" class="story-preview"></p><div id="detail-photo" class="photo-slot hidden"></div><div id="story-section" class="hidden"><div class="story-controls"><div class="actions"><button class="btn" id="listen">▶ Poslušaj zgodbo</button><button class="btn" id="pause" style="background:#647482" disabled>⏸ Premor</button></div><label class="speed-label"><input type="checkbox" id="music-enabled" checked> Predvajaj glasbeni uvod in zaključek</label><label class="speed-label" for="speech-rate">Hitrost govora: <select id="speech-rate"><option value="0.85">Počasneje (0,85×)</option><option value="0.92" selected>Umirjeno (0,92×)</option><option value="1">Običajno (1×)</option><option value="1.15">Hitreje (1,15×)</option></select></label><p class="muted story-hint">Slovenski računalniški glas. Glasbeni uvod traja približno 6 sekund in se nežno utiša; po zgodbi sledi glasbeni zaključek.</p></div><div class="actions"><button class="btn" id="read" aria-expanded="false" aria-controls="detail-text" style="background:#175b84">📖 Preberi zgodbo</button><button class="btn" id="more" aria-expanded="false" aria-controls="extra" style="background:#805e29">Želim izvedeti več</button></div><div id="detail-text" class="story-text hidden"></div><div id="extra" class="hidden"><h3>Dodatne informacije</h3><p>Grad ima srednjeveške korenine, pozneje pa je dobil baročno podobo. Danes v njem deluje Galerija-Muzej Lendava.</p><p>V prihodnjih različicah bova tukaj dodajala preverjena zgodovinska poglavja, zanimivosti, stare fotografije in daljše zvočne posnetke.</p></div></div><p id="story-unavailable" class="muted">Zgodba za to znamenitost je še v pripravi.</p><div class="actions" style="margin-top:16px"><button class="btn" id="navigate">Odpri pot v Google Maps ↗</button></div></dialog>
+<audio id="story-music" preload="auto"></audio>
 <footer>Idejna zasnova in pobuda: Peter Balažek · Lendava pripoveduje · Razvojni prototip</footer>
 <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
 <script>
 // Koordinate so začetne orientacijske točke; pred javno objavo jih preverimo na terenu.
 const places=[
-{id:'dvorana',name:'Gledališka in koncertna dvorana',type:'Arhitektura in kultura',lat:46.5638,lng:16.4510,description:'Spoznaj arhitekturo in kulturni utrip Lendave. Preverjena zgodovinska pripoved bo dodana v naslednji fazi.'},
-{id:'sinagoga',name:'Sinagoga Lendava',type:'Judovska dediščina',lat:46.5641,lng:16.4527,description:'Prostor spomina na judovsko skupnost v Lendavi. Podrobno zgodbo pripravljamo na podlagi preverjenih virov.'},
-{id:'grad',name:'Lendavski grad',type:'Zgodovina mesta',lat:46.5660,lng:16.4512,description:'Odkrij zgodbe gradu in mesta. Preverjen zgodovinski opis in zvočni vodnik sledita.'}
+{id:'dvorana',name:'Gledališka in koncertna dvorana',type:'Arhitektura in kultura',lat:46.5638,lng:16.4510,description:'Spoznaj nenavadno arhitekturo in hišo, v kateri Lendava zaživi.'},
+{id:'sinagoga',name:'Sinagoga Lendava',type:'Judovska dediščina',lat:46.5641,lng:16.4527,description:'Prisluhni zgodbi o ljudeh, ki so soustvarjali Lendavo, in spominu, ki ga ohranja sinagoga.'},
+{id:'grad',name:'Lendavski grad',type:'Zgodovina mesta',lat:46.5660,lng:16.4512,description:'Prisluhni zgodbi gradu, ki že stoletja bdi nad Lendavo.'},
+{id:'vinarium',name:'Razgledni stolp Vinarium',type:'Razgledi in vinogradi',lat:46.5768,lng:16.4674,description:'Tam, kjer pogled seže v štiri države.'},
+{id:'trojica',name:'Kapelica Svete Trojice',type:'Zgodovina in izročilo',lat:46.5725,lng:16.4617,description:'Skrivnost na hribu nad Lendavo.'},
+{id:'stadion',name:'Športni park Lendava',type:'Športna dediščina',lat:46.5588,lng:16.4515,description:'Kjer se je pisala zgodovina slovenskega nogometa.'}
 ];
+const castleStory=`Če ste se že kdaj sprehodili po Lendavi, ste ga zagotovo opazili. Tam zgoraj, na griču nad mestom, stoji naš grad.
+
+Domačini smo ga vajeni. Spremlja nas na poti v službo, v šolo ali na sprehodu. A čeprav ga gledamo skoraj vsak dan, se za njegovimi zidovi skriva marsikatera zanimiva zgodba.
+
+Njegove korenine segajo daleč v srednji vek, ko so tukaj živeli plemiči iz rodbine Bánffy. Grad ni bil le njihov dom. Bil je tudi zatočišče in pomembna obrambna točka.
+
+V tistih časih življenje v Lendavi ni bilo vedno mirno. Posebej težko je bilo v obdobju osmanskih vpadov. Grad je prestal številne nevarnosti in ostal pomemben simbol varnosti za ljudi, ki so živeli pod njim.
+
+Skozi stoletja so se menjavali gospodarji, spreminjala se je podoba mesta in spreminjal se je tudi grad. Ko je prešel v roke družine Esterházy, je dobil svojo značilno baročno podobo, ki jo lahko občudujemo še danes.
+
+Toda tisto, kar je pri našem gradu najlepše, ni samo njegova zgodovina. Je tudi razgled.
+
+Ko stojite ob njem in pogledate proti mestu, vidite strehe hiš, ulice in pokrajino, kjer se stikajo različni jeziki, kulture in običaji. Prav ta preplet je že od nekdaj del naše Lendave.
+
+Danes v gradu domuje Galerija-Muzej Lendava. V prostorih, kjer so nekoč živeli plemiči, lahko spoznavate umetnost, zgodovino in dediščino našega kraja.
+
+In ko boste odhajali, se še enkrat ozrite proti gradu. Za nas domačine ni le znamenitost na hribu. Je del naše Lendave. Del naših spominov. In del zgodb, ki jih radi delimo z vami.`;
+const synagogueStory=`Če se sprehodite po starem mestnem jedru Lendave, boste na Spodnji ulici naleteli na posebno stavbo. Na prvi pogled je morda nekoliko skromna, vendar se za njenimi zidovi skriva ena najpomembnejših zgodb našega mesta.
+
+To je lendavska sinagoga.
+
+Da bi razumeli njen pomen, se moramo vrniti v čas, ko je bila Lendava živahno trgovsko in obrtniško središče.
+
+Takrat so tukaj drug ob drugem živeli ljudje različnih narodnosti, jezikov in ver. Pomemben del tega življenja je bila tudi judovska skupnost.
+
+Judovski trgovci, obrtniki, zdravniki in drugi meščani so soustvarjali podobo Lendave. Njihove družine so imele tukaj svoje domove, otroke so pošiljale v šolo, sodelovale pri razvoju mesta in si ustvarjale prihodnost.
+
+Leta 1866 so začeli graditi sinagogo, ki jo lahko občudujete še danes.
+
+Bila je veliko več kot samo verska stavba. Bila je prostor srečevanja, molitve in pripadnosti skupnosti.
+
+Potem pa je prišlo leto 1944.
+
+Med drugo svetovno vojno so bili lendavski Judje preganjani. Aprila tistega leta so jih zbrali prav tukaj, v sinagogi, nato pa odpeljali proti nacističnim taboriščem.
+
+Večina se jih ni nikoli vrnila.
+
+Z njihovim odhodom Lendava ni izgubila le svojih prebivalcev. Izgubila je sosede, prijatelje, družine in pomemben del svoje kulturne dediščine.
+
+Sinagoga je po vojni ostala, a svojega prvotnega verskega namena ni več opravljala.
+
+V devetdesetih letih so jo obnovili. Danes je prostor kulture, razstav in spomina. V njej lahko spoznavamo zgodovino judovske skupnosti in se spominjamo žrtev holokavsta.
+
+Ko boste stali pred to stavbo, si vzemite trenutek.
+
+Pomislite na ljudi, ki so nekoč hodili skozi njena vrata. Na njihove vsakdanje skrbi, veselje, praznike in sanje.
+
+Njihove zgodbe so del zgodovine Lendave.
+
+In prav zato je pomembno, da jih pripovedujemo naprej.`;
+const hallStory=`Ko se sprehajate skozi središče Lendave, boste prej ali slej naleteli na stavbo, ob kateri se marsikdo ustavi in jo še enkrat pogleda.
+
+Nekoliko nenavadna je, kajne?
+
+Njena streha, oblike in zanimive podrobnosti niso podobne običajnim stavbam. Nekateri v njej vidijo veliko barko, drugi pravljično hišo.
+
+Mi domačini pa ji najpogosteje rečemo kar kulturni dom.
+
+Za njeno podobo je zaslužen priznani madžarski arhitekt Imre Makovecz, ki je verjel, da mora biti arhitektura povezana z naravo, ljudmi in zgodbami kraja.
+
+Zato ta stavba ni nastala kot povsem običajna gledališka dvorana. Njene oblike, naravni materiali in simbolika vabijo obiskovalca, da v njej odkrije nekaj posebnega.
+
+Toda pot do njenega nastanka ni bila preprosta.
+
+Prvi načrti so nastali že v začetku devetdesetih let. Gradnja se je začela leta 1995, nato pa so sledile težave, zamude in celo večletna prekinitev del.
+
+A Lendava je vztrajala.
+
+In 18. septembra 2004 so se vrata nove gledališke in koncertne dvorane končno odprla.
+
+Predstavljajte si tisti večer. Luči, pričakovanje obiskovalcev, zvok glasbe in prvi nastopi na odru, ki je mestu odprl povsem nove možnosti.
+
+Danes dvorana sprejme 444 obiskovalcev. V njej se vrstijo koncerti, gledališke predstave, plesni nastopi, otroške prireditve in številni drugi dogodki.
+
+Posebnost našega kulturnega doma pa niso samo nastopi.
+
+Je tudi prostor, kjer se srečujejo ljudje različnih generacij, jezikov in kultur.
+
+V Lendavi sta slovenska in madžarska kultura že dolgo prepleteni. In prav tukaj se ta povezanost pogosto najlepše pokaže.
+
+Morda ste prišli na koncert. Morda si boste ogledali gledališko predstavo. Ali pa ste se pred stavbo ustavili zgolj zaradi njene zanimive podobe.
+
+Kakor koli že, upamo, da boste začutili vsaj delček tega, kar nam pomeni.
+
+Kajti za nas domačine kulturni dom ni le stavba.
+
+Je prostor srečevanj, aplavzov, nasmehov in nepozabnih trenutkov.
+
+Je hiša, v kateri Lendava vedno znova zaživi.`;
+const vinariumStory=`Če si se povzpel na Vinarium, si pravkar prišel na eno najlepših razglednih točk daleč naokrog.
+
+Dobrodošel nad Lendavo!
+
+Poglej okoli sebe. Pod teboj se razprostirajo Lendavske gorice, med vinogradi se vijejo poti, v dolini pa leži mesto, ki ima za seboj stoletja zanimivih zgodb.
+
+A tukaj zgoraj je nekaj prav posebnega. Če je vreme lepo in je pogled jasen, lahko z enega mesta občuduješ pokrajino kar štirih držav: Slovenije, Madžarske, Hrvaške in Avstrije.
+
+To ni naključje. Lendava je že od nekdaj živela na stičišču različnih narodov, jezikov in kultur. Meje so se skozi zgodovino spreminjale, ljudje pa so tukaj živeli, delali, trgovali in ustvarjali skupno zgodbo.
+
+Razgledni stolp Vinarium so odprli leta 2015. Visok je 53,5 metra in je kmalu postal eden najbolj prepoznavnih simbolov Lendave.
+
+Toda prava posebnost tega kraja ni samo stolp.
+
+So tudi gorice, ki ga obdajajo. Generacije domačinov so tukaj obdelovale vinograde, praznovale trgatve in negovale tradicijo, ki je še danes pomemben del življenja v Lendavi.
+
+Zato si vzemi trenutek.
+
+Poglej proti prostrani ravnici. Opazuj vinograde, griče, vasice in ceste, ki se izgubljajo v daljavi. Poskusi prepoznati kraje na obeh straneh državnih meja in uživaj v pokrajini, ki se razprostira pred teboj.
+
+In pomisli, koliko različnih življenjskih zgodb se skriva v tej pokrajini.
+
+Morda je prav to najlepše pri Vinariumu: da ti omogoči pogledati daleč čez meje, hkrati pa te spomni, kako poseben je kraj, na katerem stojiš.
+
+Dobrodošel v Lendavskih goricah. In uživaj v razgledu!`;
+const trojicaStory=`Visoko nad Lendavo, med vinogradi in tihimi potmi, stoji majhna kapelica, ki že skoraj tristo let čuva zgodbe našega kraja.
+
+Dobrodošel pri kapelici Svete Trojice.
+
+Na prvi pogled je to miren, skoraj pravljičen kotiček Lendavskih goric. Toda ta kraj skriva zgodbo, ki je precej bolj nenavadna, kot bi si morda predstavljal.
+
+Preden je tukaj stala kapelica, je imel hrib pomembno obrambno vlogo. Z njegovega vrha je bilo mogoče opazovati okolico in pravočasno zaznati nevarnost, ki se je približevala mestu.
+
+V spomin na konec turških vpadov je družina Gludovácz skupaj z verniki v letih 1727 in 1728 pomagala postaviti kapelico, ki jo občudujemo še danes.
+
+Toda najbolj skrivnostna zgodba se skriva v njeni notranjosti.
+
+Tam počiva naravno mumificirano telo Mihaela Hadika.
+
+Po ljudskem izročilu naj bi bil Hadik pogumen vojskovodja, ki je branil Lendavo pred Turki. O njem so se pripovedovale zgodbe, ki so skozi stoletja postale del domačih legend.
+
+A zgodovina nam razkrije nekoliko drugačno sliko.
+
+Mihael Hadik je umrl leta 1733, njegovo telo pa se je zaradi posebnih razmer v grobnici naravno ohranilo. K temu sta pripomogla predvsem apnenčasta podlaga in zračnost prostora.
+
+Tako je nastala ena najbolj nenavadnih zgodovinskih posebnosti Lendave.
+
+Ob kapelici se razprostira tudi najstarejše lendavsko pokopališče. Stari nagrobniki nas spominjajo na ljudi in družine, ki so nekoč živeli v našem mestu.
+
+Če se za trenutek ustaviš in pogledaš proti dolini, boš razumel, zakaj so ljudje temu hribu že od nekdaj pripisovali poseben pomen.
+
+Tukaj se srečujejo zgodovina, vera, ljudsko izročilo in mir Lendavskih goric.
+
+In morda prav zato kapelica Svete Trojice še danes ostaja kraj, kjer se obiskovalec za trenutek ustavi, prisluhne tišini in začuti preteklost.`;
+const stadionStory=`Dobrodošel v Športnem parku Lendava.
+
+Morda se ti na prvi pogled zdi, da stojiš pred povsem običajnim nogometnim stadionom.
+
+Toda tukaj nogomet ni samo igra. Tukaj je del zgodovine mesta.
+
+Zgodba lendavskega nogometa se je začela že 11. maja leta 1903, ko je bilo v takratni Dolnji Lendavi ustanovljeno nogometno društvo.
+
+Predstavljaj si tiste čase.
+
+Ni bilo sodobnih stadionov, reflektorjev ali velikih tribun. Nogometaši so igrali na preprostih travnatih površinah, oprema je bila skromna, navdušenje nad novo igro pa vedno večje.
+
+Leta 1913 so slovesno odprli nogometno igrišče nasproti takratne dežnikarne. Leta 1935 pa je novo igrišče zaživelo na območju današnjega športnega parka.
+
+In potem je prišlo leto 1946.
+
+Lendavski nogometaši so postali slovenski prvaki in si priborili nastop v prvi jugoslovanski ligi.
+
+Predstavljaj si ponos majhnega mesta, katerega nogometaši so se lahko pomerili z velikimi imeni takratnega nogometa.
+
+V naslednjih desetletjih je klub doživljal vzpone in padce. Spreminjala so se imena, generacije igralcev in podoba stadiona.
+
+Toda nekaj je ostalo.
+
+Ljubezen do nogometa.
+
+Današnji Športni park je sodobnejši od nekdanjih igrišč. Ima tribune, reflektorje in vse, kar potrebuje nogometni stadion našega časa.
+
+A njegova največja vrednost niso zidovi ali sedeži.
+
+So spomini.
+
+Spomini na pomembne zmage, boleče poraze, polne tribune in otroke, ki so tukaj prvič sanjali, da bodo nekoč zaigrali za domači klub.
+
+Lendava se lahko pohvali z nogometno tradicijo, katere korenine segajo v leto 1903 – med najzgodnejše začetke organiziranega nogometa na ozemlju današnje Slovenije.
+
+Zato, ko danes pogledaš na zelenico, ne vidiš samo nogometnega igrišča.
+
+Vidiš prostor, kjer se že več kot stoletje piše zgodba o vztrajnosti, pripadnosti in športnem ponosu.
+
+To je zgodba lendavskega nogometa.
+
+To je zgodba Nafte.`;
+const stories={grad:castleStory,sinagoga:synagogueStory,dvorana:hallStory,vinarium:vinariumStory,trojica:trojicaStory,stadion:stadionStory};
+// Začasne fotografije; pred objavo preverimo prikaz in pozneje zamenjamo s svojimi.
+const photos={
+ grad:{url:'https://commons.wikimedia.org/wiki/Special:FilePath/Lendava_Castle_(1).jpg?width=960',author:'Krzysztof Golik (Tournasol7)',license:'CC BY-SA 4.0',source:'https://commons.wikimedia.org/wiki/File:Lendava_Castle_(1).jpg'},
+ sinagoga:{url:'https://commons.wikimedia.org/wiki/Special:FilePath/Sinagoga_lendava_0.JPG?width=960',author:'Gibalec',license:'CC BY-SA 2.5 SI',source:'https://commons.wikimedia.org/wiki/File:Sinagoga_lendava_0.JPG'}
+};
+function photoMarkup(id){const ph=photos[id];if(!ph)return '<div class="placeholder">📷<br>Fotografija bo dodana pozneje</div>';return '<img loading="lazy" alt="Fotografija znamenitosti" src="'+ph.url+'" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'placeholder\',textContent:\'Fotografija trenutno ni na voljo\'}))">'}
+function creditMarkup(id){const ph=photos[id];return ph?'<p class="photo-credit">Foto: '+ph.author+' · '+ph.license+' · <a href="'+ph.source+'" target="_blank" rel="noopener">vir in licenca</a></p>':''}
+
+const extras={vinarium:'<h3>Več o Vinariumu</h3><p>Razgledni stolp je visok 53,5 metra in je bil odprt leta 2015. Ob jasnem vremenu pogled seže v štiri države.</p>',trojica:'<h3>Več o kapelici</h3><p>Kapelica izvira iz 18. stoletja. Posebnost je naravno mumificirano telo Mihaela Hadika; ljudsko izročilo in preverjena zgodovina se deloma razlikujeta.</p>',stadion:'<h3>Več o stadionu</h3><p>Organizirani nogomet v Lendavi sega v leto 1903. Današnja pravna organizacija kluba ni ista kot zgodovinsko društvo.</p>',dvorana:'<h3>Več o dvorani</h3><p><strong>Arhitekt:</strong> Imre Makovecz, predstavnik organske arhitekture.</p><p><strong>Odprtje:</strong> 18. september 2004. Dvorana ima 444 sedežev.</p><p>V prihodnje bova dodala zgodbo o nastanku stavbe, arhitekturnih posebnostih, fotografije gradnje in dogodke, ki so zaznamovali kulturno življenje Lendave.</p><p>To je začetni povzetek; dodatna poglavja še pripravljava.</p>',grad:'<h3>Več o gradu</h3><p>Grad ima srednjeveške korenine, pozneje pa je dobil baročno podobo. Danes v njem deluje Galerija-Muzej Lendava.</p><p>V prihodnjih različicah bova tukaj dodajala preverjena zgodovinska poglavja, zanimivosti, stare fotografije in daljše zvočne posnetke.</p>',sinagoga:'<h3>Več o sinagogi</h3><p><strong>Judovska skupnost:</strong> V prihodnje bova dodala preverjene podatke o družinah, obrteh in življenju v Dolnji Lendavi.</p><p><strong>Leto 1944:</strong> Posebno poglavje bo namenjeno preganjanju in deportacijam ter ohranjanju spomina na žrtve.</p><p><strong>Dediščina:</strong> Dodala bova informacije o stavbi, njeni obnovi in judovskem pokopališču v Dolgi vasi.</p><p>To je za zdaj vsebinski načrt, ne dokončano zgodovinsko gradivo.</p>'};
 const cards=document.getElementById('cards');const dialog=document.getElementById('detail');let current=null;
-function openPlace(p){current=p;document.getElementById('detail-title').textContent=p.name;document.getElementById('detail-text').textContent=p.description;dialog.showModal()}
-places.forEach(p=>{const c=document.createElement('article');c.className='card';const tag=document.createElement('p');tag.className='tag';tag.textContent=p.type;const h=document.createElement('h3');h.textContent=p.name;const desc=document.createElement('p');desc.textContent=p.description;const btn=document.createElement('button');btn.className='btn';btn.textContent='Odkrij zgodbo';btn.addEventListener('click',()=>openPlace(p));c.append(tag,h,desc,btn);cards.append(c)});
-document.getElementById('close').onclick=()=>dialog.close();document.getElementById('navigate').onclick=()=>{if(current)window.open('https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(current.lat+','+current.lng),'_blank','noopener')};
+const musicAudio=document.getElementById('story-music');
+let introTimer=null, playbackToken=0, speechUtterance=null, fadeFrame=null, outroTimer=null;
+const MUSIC_VOLUME=.9;
+function cancelFade(){if(fadeFrame!==null){cancelAnimationFrame(fadeFrame);fadeFrame=null;}if(outroTimer!==null){clearTimeout(outroTimer);outroTimer=null;}}
+function fadeMusic(from,to,duration,token,done){
+ if(fadeFrame!==null)cancelAnimationFrame(fadeFrame);
+ const start=performance.now();musicAudio.volume=from;
+ function step(now){if(token!==playbackToken){fadeFrame=null;return;}const t=Math.min(1,(now-start)/duration);musicAudio.volume=Math.max(0,Math.min(1,from+(to-from)*t));if(t<1)fadeFrame=requestAnimationFrame(step);else{fadeFrame=null;if(done)done();}}
+ fadeFrame=requestAnimationFrame(step);
+}
+function stopSpeech(){
+ playbackToken++;
+ cancelFade();
+ if(introTimer!==null){clearTimeout(introTimer);introTimer=null;}
+ musicAudio.pause();musicAudio.currentTime=0;
+ if('speechSynthesis' in window)window.speechSynthesis.cancel();
+ speechUtterance=null;
+ document.getElementById('listen').textContent='▶ Poslušaj zgodbo';
+ document.getElementById('pause').disabled=true;
+ document.getElementById('pause').textContent='⏸ Premor';
+}
+function playMusic(id){
+ if(!document.getElementById('music-enabled').checked||!['grad','sinagoga','dvorana','vinarium','trojica','stadion'].includes(id))return;
+ musicAudio.pause();musicAudio.src='glasba/'+id+'.mp3';musicAudio.currentTime=0;
+ musicAudio.volume=MUSIC_VOLUME;
+ musicAudio.play().catch(()=>{});
+}
+function openPlace(p){stopSpeech();current=p;const photo=document.getElementById('detail-photo');photo.classList.remove('hidden');photo.innerHTML=photoMarkup(p.id);const oldCredit=document.getElementById('detail-credit');if(oldCredit)oldCredit.remove();photo.insertAdjacentHTML('afterend','<div id="detail-credit">'+creditMarkup(p.id)+'</div>');const hasStory=Boolean(stories[p.id]);document.getElementById('detail-title').textContent=p.name;document.getElementById('detail-intro').textContent=p.description;document.getElementById('detail-text').textContent=stories[p.id]||'';document.getElementById('extra').innerHTML=extras[p.id]||'';document.getElementById('music-enabled').disabled=!['grad','sinagoga','dvorana','vinarium','trojica','stadion'].includes(p.id);document.getElementById('music-enabled').parentElement.style.display=document.getElementById('music-enabled').disabled?'none':'';document.querySelector('.story-hint').textContent=document.getElementById('music-enabled').disabled?'Slovenski računalniški glas. Glasbeni uvod za to znamenitost še pripravljamo.':'Slovenski računalniški glas. Glasbeni uvod traja približno 6 sekund in se nežno utiša; po zgodbi sledi glasbeni zaključek.';document.getElementById('detail-text').classList.add('hidden');document.getElementById('read').textContent='📖 Preberi zgodbo';document.getElementById('read').setAttribute('aria-expanded','false');document.getElementById('story-section').classList.toggle('hidden',!hasStory);document.getElementById('story-unavailable').classList.toggle('hidden',hasStory);document.getElementById('extra').classList.add('hidden');document.getElementById('more').textContent='Želim izvedeti več';document.getElementById('more').setAttribute('aria-expanded','false');dialog.showModal()}
+places.forEach(p=>{const c=document.createElement('article');c.className='card';const tag=document.createElement('p');tag.className='tag';tag.textContent=p.type;const h=document.createElement('h3');h.textContent=p.name;const desc=document.createElement('p');desc.textContent=p.description;const btn=document.createElement('button');btn.className='btn';btn.textContent='Odkrij zgodbo';btn.addEventListener('click',()=>openPlace(p));const picture=document.createElement('div');picture.className='card-photo';picture.innerHTML=photoMarkup(p.id);const body=document.createElement('div');body.className='card-body';body.append(tag,h,desc,btn);body.insertAdjacentHTML('beforeend',creditMarkup(p.id));c.append(picture,body);cards.append(c)});
+document.getElementById('close').onclick=()=>dialog.close();dialog.addEventListener('close',stopSpeech);
+document.getElementById('read').onclick=()=>{const e=document.getElementById('detail-text');e.classList.toggle('hidden');const open=!e.classList.contains('hidden');document.getElementById('read').textContent=open?'📖 Skrij besedilo':'📖 Preberi zgodbo';document.getElementById('read').setAttribute('aria-expanded',String(open))};
+document.getElementById('more').onclick=()=>{const e=document.getElementById('extra');e.classList.toggle('hidden');const open=!e.classList.contains('hidden');document.getElementById('more').textContent=open?'Skrij dodatne podatke':'Želim izvedeti več';document.getElementById('more').setAttribute('aria-expanded',String(open))};
+document.getElementById('listen').onclick=()=>{
+ if(speechUtterance||introTimer!==null||window.speechSynthesis?.speaking){stopSpeech();return;}
+ if(!('speechSynthesis' in window)){alert('Brskalnik ne podpira glasnega branja.');return;}
+ stopSpeech();const token=playbackToken;const placeId=current.id;const hasMusic=['grad','sinagoga','dvorana','vinarium','trojica','stadion'].includes(placeId);
+ let speechText=stories[placeId];
+ if(placeId==='dvorana')speechText=speechText.replaceAll('Makovecz','Makovec');
+ if(placeId==='stadion'){
+  speechText=speechText
+   .replaceAll('11. maja leta 1903','enajstega maja leta tisoč devetsto tri')
+   .replaceAll('dežnikarne','tovarne dežnikov')
+   .replaceAll('Leta 1913','Leta tisoč devetsto trinajst')
+   .replaceAll('Leta 1935','Leta tisoč devetsto petintrideset')
+   .replaceAll('leto 1946','leto tisoč devetsto šestinštirideset')
+   .replaceAll('Nafta 1903','Nafta tisoč devetsto tri');
+ }
+ const u=new SpeechSynthesisUtterance(speechText);speechUtterance=u;
+ u.lang='sl-SI';u.rate=Number(document.getElementById('speech-rate').value);
+ const sl=window.speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith('sl'));if(sl)u.voice=sl;
+ u.onend=()=>{
+  if(token!==playbackToken)return;stopSpeech();
+  if(!document.getElementById('music-enabled').checked||!hasMusic)return;
+  const outroToken=playbackToken;playMusic(placeId);musicAudio.volume=0;
+  fadeMusic(0,MUSIC_VOLUME,900,outroToken);
+  outroTimer=setTimeout(()=>{outroTimer=null;if(outroToken!==playbackToken)return;fadeMusic(MUSIC_VOLUME,0,2000,outroToken,()=>{musicAudio.pause();musicAudio.currentTime=0;});},4500);
+ };
+ u.onerror=()=>{if(token===playbackToken)stopSpeech()};
+ document.getElementById('listen').textContent='■ Ustavi zgodbo';
+ document.getElementById('pause').disabled=true;
+ if(document.getElementById('music-enabled').checked&&hasMusic){
+  let started=false;
+  const startSpeech=()=>{if(started||token!==playbackToken)return;started=true;if(introTimer!==null)clearTimeout(introTimer);introTimer=null;cancelFade();musicAudio.pause();musicAudio.currentTime=0;document.getElementById('pause').disabled=false;window.speechSynthesis.speak(u)};
+  musicAudio.onerror=startSpeech;
+  playMusic(placeId);
+  introTimer=setTimeout(startSpeech,6500);
+  // Po 4 sekundah začnemo 2,5-sekundno postopno utišanje.
+  setTimeout(()=>{if(token===playbackToken&&!started)fadeMusic(MUSIC_VOLUME,0,2500,token);},4000);
+ }else{document.getElementById('pause').disabled=false;window.speechSynthesis.speak(u)}
+};
+document.getElementById('pause').onclick=()=>{if(introTimer!==null)return;const s=window.speechSynthesis;if(s.paused){s.resume();document.getElementById('pause').textContent='⏸ Premor'}else{s.pause();document.getElementById('pause').textContent='▶ Nadaljuj'}};document.getElementById('navigate').onclick=()=>{if(current)window.open('https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(current.lat+','+current.lng),'_blank','noopener')};
 document.getElementById('explore').onclick=()=>document.getElementById('map-title').scrollIntoView({behavior:'smooth'});
 // OpenFreeMap + MapLibre: javni vektorski slog brez API ključa.
-const map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',center:[16.4517,46.5648],zoom:15});
+const map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',center:[16.4570,46.5672],zoom:13.7});
 map.addControl(new maplibregl.NavigationControl(),'top-right');
 map.on('error',()=>{const el=document.getElementById('gps-status');if(!el.dataset.mapWarning){el.dataset.mapWarning='1';el.textContent='Zemljevida ni mogoče naložiti. Preveri internetno povezavo ali poskusi prek lokalnega spletnega strežnika.'}});
 places.forEach(p=>{const el=document.createElement('button');el.type='button';el.title=p.name;el.setAttribute('aria-label',p.name);el.textContent='📍';el.style.cssText='border:0;background:white;border-radius:50%;width:36px;height:36px;cursor:pointer;box-shadow:0 2px 8px #0005;font-size:20px';el.onclick=()=>openPlace(p);new maplibregl.Marker({element:el}).setLngLat([p.lng,p.lat]).addTo(map)});
